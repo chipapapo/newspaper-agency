@@ -17,6 +17,8 @@ class Topic(models.Model):
 class Redactor(AbstractUser):
     years_of_experience = models.IntegerField()
 
+    REQUIRED_FIELDS = ["years_of_experience"]
+
     class Meta:
         ordering = ["username"]
         verbose_name = "redactor"
