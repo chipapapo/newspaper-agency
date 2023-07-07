@@ -1,9 +1,13 @@
+import random
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
 class Topic(models.Model):
     name = models.CharField(max_length=255)
+    description = models.TextField()
+    competitiveness = models.TextField()
 
     class Meta:
         ordering = ["name"]
@@ -16,6 +20,8 @@ class Topic(models.Model):
 
 class Redactor(AbstractUser):
     years_of_experience = models.IntegerField()
+    monthly_expenses = models.IntegerField(default=random.randint(200, 20000))
+    monthly_income = models.IntegerField(default=random.randint(200, 20000))
 
     REQUIRED_FIELDS = ["years_of_experience"]
 
