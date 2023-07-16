@@ -34,6 +34,11 @@ urlpatterns = [
         name="topic-list",
     ),
     path(
+        "topics/<int:pk>/",
+        TopicDetailView.as_view(),
+        name="topic-detail",
+    ),
+    path(
         "topics/",
         TopicCreateView.as_view(),
         name="topic-create",
