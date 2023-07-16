@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser
 class Topic(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(default="lorem")
-    competitiveness = models.TextField(default="ipsum")
+    competitiveness = models.IntegerField(default=5)
 
     class Meta:
         ordering = ["name"]
