@@ -17,7 +17,7 @@
           <div class="col-auto my-auto">
             <div class="h-100">
               <h5 class="mb-1">
-                {{ topic.name }}
+                {{ topic }}
               </h5>
             </div>
           </div>
@@ -25,7 +25,7 @@
             <div class="nav-wrapper position-relative end-0">
               <ul class="nav nav-pills nav-fill p-1 bg-transparent" role="tablist">
                 <li class="nav-item">
-                  <a class="nav-link mb-0 px-0 py-1 " data-bs-toggle="tab" href="{% url 'agency:topic-update' topic.pk %}" role="tab" aria-selected="false">
+                  <a class="nav-link mb-0 px-0 py-1 " href="{% url 'agency:topic-update' pk=topic.pk %}" aria-selected="false">
                     <svg class="text-dark" width="16px" height="16px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                       <title>settings</title>
                       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -82,35 +82,54 @@
                 </div>
               </div>
             </div>
+            <div class="card-body p-3">
               <ul class="list-group">
-                {% for newspaper in topic.newspaper.all %}
-                  <li class="list-group-item border-0 ps-0 pt-0 text-sm">{{ newspaper.title }}</li>
+                {% for newspaper in topic.topics.all %}
+                  <li class="list-group-item border-0 ps-0 pt-0 text-sm">
+                    <a href="{% url 'agency:newspaper-detail' newspaper.pk %}">
+                      {{ newspaper }}
+                    </a>
+                  </li>
                 {% endfor %}
               </ul>
             </div>
+            </div>
           </div>
-        </div>
-        <div class="col-12 col-xl-4">
-          <div class="card h-100">
-            <div class="card-header pb-0 p-3">
-              <div class="row">
-                <div class="col-md-8 d-flex align-items-center">
-                  <h6 class="mb-0">Related Redactors</h6>
+          <div class="col-12 col-xl-4">
+            <div class="card h-100">
+              <div class="card-header pb-0 p-3">
+                <div class="row">
+                  <div class="col-md-8 d-flex align-items-center">
+                    <h6 class="mb-0">Related Redactors</h6>
+                  </div>
                 </div>
               </div>
-            </div>
-              <ul class="list-group">
-                {% for redactor in topic.redactors.all %}
-                  <li class="list-group-item border-0 ps-0 pt-0 text-sm">{{ redactor.first_name }} {{ redactor.last_name }} ({{ redactor.username }})/10</li>
-                {% endfor %}
-              </ul>
+              <div class="card-body p-3">
+                <ul class="list-group">
+                  {% for newspaper in topic.topics.all %}
+                    {% for redactor in newspaper.publishers.all %}
+                      <li class="list-group-item border-0 ps-0 pt-0 text-sm">
+                        <a href="{% url 'agency:redactor-detail' redactor.pk %}">
+                          {{ redactor }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  {% endfor %}
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+      </div>
+    </div>
 
+{% for newspaper in topic.newspaper_set.all %}
+    {{ newspaper.title }}
+  {% empty %}
+    No newspaper
+{% endfor %}
 
       {% include "includes/footer.html" %}
-    </div>
-  </div>
+{#    </div>#}
+{#  </div>#}
 
 {% endblock content %}

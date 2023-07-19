@@ -7,7 +7,7 @@
     <div class="col-12">
       <div class="card mb-4">
         <div class="card-header pb-0">
-          <h6>Topics table</h6>
+          <h6>Redactors table</h6>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive p-0">
@@ -15,29 +15,41 @@
               <thead>
                 <tr>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Competitiveness</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Years of experience</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Monthly Expenses</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Monthly Income</th>
+
+
                   <th class="text-secondary opacity-7"></th>
                 </tr>
               </thead>
               <tbody>
-                {% for topic in topic_list %}
+                {% for redactor in redactor_list %}
                   <tr>
                     <td>
                       <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm">{{ topic }}</h6>
+                          <h6 class="mb-0 text-sm">
+                            {{ redactor }}
+                          </h6>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <p class="text-xs font-weight-bold mb-0">{{ topic.description|slice:":80" }}...</p>
+                      <p class="text-xs font-weight-bold mb-0">{{ redactor.email }}</p>
+                    </td>
+                    <td>
+                      <p class="text-xs font-weight-bold mb-0">{{ redactor.years_of_experience }}</p>
+                    </td>
+                    <td>
+                      <p class="text-xs font-weight-bold mb-0">{{ redactor.monthly_expenses }}</p>
                     </td>
                     <td class="align-middle text-center">
-                      <p class="text-xs font-weight-bold mb-0">{{ topic.competitiveness }}/10</p>
+                      <p class="text-xs font-weight-bold mb-0">{{ redactor.monthly_income }}</p>
                     </td>
                     <td class="align-middle">
-                      <a href="{% url 'agency:topic-detail' topic.pk %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                      <a href="{% url 'agency:redactor-detail' redactor.pk %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                         Detail
                       </a>
                     </td>
