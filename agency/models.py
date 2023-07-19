@@ -31,7 +31,7 @@ class Redactor(AbstractUser):
         verbose_name_plural = "redactors"
 
     def __str__(self):
-        return f"{self.username} ({self.first_name} {self.last_name})"
+        return f"{self.first_name} {self.last_name} ({self.username})"
 
 
 class Newspaper(models.Model):

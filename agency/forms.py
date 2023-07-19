@@ -26,11 +26,11 @@ class RedactorCreationForm(UserCreationForm):
             "last_name",
         )
 
-    def clean_years_of_experience(self):  # this logic is optional, but possible
+    def clean_years_of_experience(self):
         return validate_years_of_experience(self.cleaned_data["years_of_experience"])
 
 
-class RedactorLicenseUpdateForm(forms.ModelForm):
+class RedactorUpdateForm(forms.ModelForm):
     class Meta:
         model = Redactor
         fields = ["years_of_experience"]

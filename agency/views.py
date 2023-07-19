@@ -16,14 +16,12 @@ from agency.forms import (
     NewspaperForm,
     RedactorSearchForm,
     RedactorCreationForm,
-    RedactorLicenseUpdateForm
+    RedactorUpdateForm
 )
 
 
 @login_required
 def index(request):
-    """View function for the home page of the site."""
-
     num_topics = Topic.objects.count()
     num_redactors = Redactor.objects.count()
     num_newspapers = Newspaper.objects.count()
@@ -168,7 +166,7 @@ class RedactorCreateView(LoginRequiredMixin, generic.CreateView):
 
 class RedactorLicenseUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Redactor
-    form_class = RedactorLicenseUpdateForm
+    form_class = RedactorUpdateForm
     success_url = reverse_lazy("agency:redactor-list")
 
 
@@ -182,7 +180,7 @@ def toggle_assign_to_newspaper(request, pk):
     redactor = Redactor.objects.get(id=request.user.id)
     if (
         Newspaper.objects.get(id=pk) in redactor.newspapers.all()
-    ):  # probably could check if car exists
+    ):
         redactor.newspapers.remove(pk)
     else:
         redactor.newspapers.add(pk)
