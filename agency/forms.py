@@ -116,15 +116,15 @@ class RegistrationForm(UserCreationForm):
                 'class': 'form-control',
                 'placeholder': 'Email'
             }),
-            'first_name': forms.EmailInput(attrs={
+            'first_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'First name'
             }),
-            'last_name': forms.EmailInput(attrs={
+            'last_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Last name'
             }),
-            'years_of_experience': forms.EmailInput(attrs={
+            'years_of_experience': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Years of experience'
             })
