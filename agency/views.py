@@ -1,22 +1,30 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-from agency.models import (
-    Topic,
-    Redactor,
-    Newspaper
+from django.shortcuts import render, redirect
+from django.contrib.auth.views import (
+    LoginView,
+    PasswordResetView,
+    PasswordChangeView,
+    PasswordResetConfirmView,
 )
+from django.contrib.auth import logout
+
+from agency.models import Topic, Redactor, Newspaper
 from agency.forms import (
     TopicSearchForm,
     NewspaperSearchForm,
     NewspaperForm,
     RedactorSearchForm,
     RedactorCreationForm,
-    RedactorUpdateForm
+    RedactorUpdateForm,
+    RegistrationForm,
+    LoginForm,
+    UserPasswordResetForm,
+    UserSetPasswordForm,
+    UserPasswordChangeForm,
 )
 
 
@@ -87,7 +95,7 @@ class TopicDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class NewspaperListView(LoginRequiredMixin, generic.ListView):
     model = Newspaper
-    paginate_by = 5
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -131,16 +139,14 @@ class NewspaperDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class RedactorListView(LoginRequiredMixin, generic.ListView):
     model = Redactor
-    paginate_by = 5
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
         username = self.request.GET.get("username", "")
 
-        context["search_form"] = RedactorSearchForm(
-            initial={"username": username}
-        )
+        context["search_form"] = RedactorSearchForm(initial={"username": username})
 
         return context
 
@@ -156,7 +162,9 @@ class RedactorListView(LoginRequiredMixin, generic.ListView):
 
 class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
     model = Redactor
-    queryset = Redactor.objects.all().prefetch_related("redactors__publishers__redactors")
+    queryset = Redactor.objects.all().prefetch_related(
+        "redactors__publishers__redactors"
+    )
 
 
 class RedactorCreateView(LoginRequiredMixin, generic.CreateView):
@@ -178,9 +186,7 @@ class RedactorDeleteView(LoginRequiredMixin, generic.DeleteView):
 @login_required
 def toggle_assign_to_newspaper(request, pk):
     redactor = Redactor.objects.get(id=request.user.id)
-    if (
-        Newspaper.objects.get(id=pk) in redactor.newspapers.all()
-    ):
+    if Newspaper.objects.get(id=pk) in redactor.newspapers.all():
         redactor.newspapers.remove(pk)
     else:
         redactor.newspapers.add(pk)
@@ -197,3 +203,48 @@ def toggle_assign_to_topic(request, pk):
     else:
         redactor.topics.add(pk)
     return HttpResponseRedirect(reverse_lazy("agency:topic-list", args=[pk]))
+
+
+# Soft UI
+
+
+class UserLoginView(LoginView):
+    template_name = "accounts/login.html"
+    form_class = LoginForm
+    success_url = reverse_lazy("agency:redactor-list")
+
+
+def register(request):
+    if request.method == "POST":
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            print("Account created successfully!")
+            return redirect("/accounts/login/")
+        else:
+            print("Register failed!")
+    else:
+        form = RegistrationForm()
+
+    context = {"form": form}
+    return render(request, "accounts/register.html", context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("/accounts/login/")
+
+
+class UserPasswordResetView(PasswordResetView):
+    template_name = "accounts/password_reset.html"
+    form_class = UserPasswordResetForm
+
+
+class UserPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = "accounts/password_reset_confirm.html"
+    form_class = UserSetPasswordForm
+
+
+class UserPasswordChangeView(PasswordChangeView):
+    template_name = "accounts/password_change.html"
+    form_class = UserPasswordChangeForm

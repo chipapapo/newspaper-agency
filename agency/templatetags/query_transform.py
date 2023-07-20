@@ -13,3 +13,8 @@ def query_transform(request, **kwargs):
             updated.pop(key, 0)
 
     return updated.urlencode()
+
+
+@register.filter
+def is_user_in_queryset(user, queryset):
+    return user in queryset.all()

@@ -1,7 +1,15 @@
-from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+from django import forms
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    AuthenticationForm,
+    PasswordChangeForm,
+    UsernameField,
+    PasswordResetForm,
+    SetPasswordForm
+)
+from django.utils.translation import gettext_lazy as _
 
 from agency.models import Newspaper, Redactor
 
@@ -59,7 +67,7 @@ class RedactorSearchForm(forms.Form):
 
 
 class NewspaperSearchForm(forms.Form):
-    model = forms.CharField(
+    title = forms.CharField(
         max_length=255,
         required=False,
         label="",
@@ -74,3 +82,86 @@ class TopicSearchForm(forms.Form):
         label="",
         widget=forms.TextInput(attrs={"placeholder": "Search by name..."}),
     )
+
+
+# Soft UI
+
+
+class RegistrationForm(UserCreationForm):
+    password1 = forms.CharField(
+        label=_("Password"),
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+    )
+    password2 = forms.CharField(
+        label=_("Password Confirmation"),
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password Confirmation'}),
+    )
+
+    class Meta:
+        model = Redactor
+        fields = (
+            'username',
+            "first_name",
+            "last_name",
+            'email',
+            "years_of_experience",
+        )
+
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Username'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Email'
+            }),
+            'first_name': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First name'
+            }),
+            'last_name': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last name'
+            }),
+            'years_of_experience': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Years of experience'
+            })
+        }
+
+
+class LoginForm(AuthenticationForm):
+    username = UsernameField(widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Username"}))
+    password = forms.CharField(
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
+    )
+
+
+class UserPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'class': 'form-control'
+    }))
+
+
+class UserSetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
+        'class': 'form-control', 'placeholder': 'New Password'
+    }), label="New Password")
+    new_password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
+        'class': 'form-control', 'placeholder': 'Confirm New Password'
+    }), label="Confirm New Password")
+
+
+class UserPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
+        'class': 'form-control', 'placeholder': 'Old Password'
+    }), label='Old Password')
+    new_password1 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
+        'class': 'form-control', 'placeholder': 'New Password'
+    }), label="New Password")
+    new_password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
+        'class': 'form-control', 'placeholder': 'Confirm New Password'
+    }), label="Confirm New Password")
