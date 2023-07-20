@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views import generic, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import (
@@ -183,26 +183,26 @@ class RedactorDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("")
 
 
-@login_required
-def toggle_assign_to_newspaper(request, pk):
-    redactor = Redactor.objects.get(id=request.user.id)
-    if Newspaper.objects.get(id=pk) in redactor.newspapers.all():
-        redactor.newspapers.remove(pk)
-    else:
-        redactor.newspapers.add(pk)
-    return HttpResponseRedirect(reverse_lazy("agency:newspaper-list", args=[pk]))
+class ToggleAssignToNewspaperView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        redactor = Redactor.objects.get(id=request.user.id)
+        if Newspaper.objects.get(id=pk) in redactor.newspapers.all():
+            redactor.newspapers.remove(pk)
+        else:
+            redactor.newspapers.add(pk)
+        return HttpResponseRedirect(reverse_lazy("agency:newspaper-list", args=[pk]))
 
 
-@login_required
-def toggle_assign_to_topic(request, pk):
-    redactor = Redactor.objects.get(id=request.user.id)
-    if (
-        Redactor.objects.get(id=pk) in redactor.topics.all()
-    ):  # probably could check if car exists
-        redactor.topics.remove(pk)
-    else:
-        redactor.topics.add(pk)
-    return HttpResponseRedirect(reverse_lazy("agency:topic-list", args=[pk]))
+class ToggleAssignToTopicView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        redactor = Redactor.objects.get(id=request.user.id)
+        if (
+                Redactor.objects.get(id=pk) in redactor.topics.all()
+        ):  # probably could check if car exists
+            redactor.topics.remove(pk)
+        else:
+            redactor.topics.add(pk)
+        return HttpResponseRedirect(reverse_lazy("agency:topic-list", args=[pk]))
 
 
 # Soft UI
@@ -214,8 +214,13 @@ class UserLoginView(LoginView):
     success_url = reverse_lazy("agency:redactor-list")
 
 
-def register(request):
-    if request.method == "POST":
+class RegisterView(View):
+    def get(self, request):
+        form = RegistrationForm()
+        context = {"form": form}
+        return render(request, "accounts/register.html", context)
+
+    def post(self, request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
@@ -223,11 +228,9 @@ def register(request):
             return redirect("/accounts/login/")
         else:
             print("Register failed!")
-    else:
-        form = RegistrationForm()
 
-    context = {"form": form}
-    return render(request, "accounts/register.html", context)
+        context = {"form": form}
+        return render(request, "accounts/register.html", context)
 
 
 def logout_view(request):
