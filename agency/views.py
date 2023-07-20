@@ -186,11 +186,11 @@ class RedactorDeleteView(LoginRequiredMixin, generic.DeleteView):
 class ToggleAssignToNewspaperView(LoginRequiredMixin, View):
     def get(self, request, pk):
         redactor = Redactor.objects.get(id=request.user.id)
-        if Newspaper.objects.get(id=pk) in redactor.newspapers.all():
-            redactor.newspapers.remove(pk)
+        if Newspaper.objects.get(id=pk) in redactor.redactors.all():
+            redactor.redactors.remove(pk)
         else:
-            redactor.newspapers.add(pk)
-        return HttpResponseRedirect(reverse_lazy("agency:newspaper-list", args=[pk]))
+            redactor.redactors.add(pk)
+        return HttpResponseRedirect(reverse_lazy("agency:newspaper-detail", args=[pk]))
 
 
 class ToggleAssignToTopicView(LoginRequiredMixin, View):
@@ -198,7 +198,7 @@ class ToggleAssignToTopicView(LoginRequiredMixin, View):
         redactor = Redactor.objects.get(id=request.user.id)
         if (
                 Redactor.objects.get(id=pk) in redactor.topics.all()
-        ):  # probably could check if car exists
+        ):
             redactor.topics.remove(pk)
         else:
             redactor.topics.add(pk)
