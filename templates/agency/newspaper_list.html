@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% load static %}
+{% load static query_transform %}
 
 {% block content %}
 <div class="container-fluid py-4">
@@ -27,7 +27,9 @@
                     <td>
                       <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm">{{ newspaper.title }}</h6>
+                          <h6 class="mb-0 text-sm">
+                            {{ newspaper.title }} {% if user|is_user_in_queryset:newspaper.publishers.all %} (Mine){% endif %}
+                          </h6>
                         </div>
                       </div>
                     </td>
