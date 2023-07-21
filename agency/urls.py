@@ -38,7 +38,7 @@ urlpatterns = [
         name="topic-detail",
     ),
     path(
-        "topics/",
+        "topics/create/",
         TopicCreateView.as_view(),
         name="topic-create",
     ),
