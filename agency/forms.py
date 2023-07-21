@@ -52,7 +52,7 @@ def validate_years_of_experience(
 ):  # regex validation is also possible here
     if not isinstance(years_of_experience, (int, float)):
         raise ValidationError("This must be a number")
-    if 0 < years_of_experience < 100:
+    if not (0 < years_of_experience < 100):
         raise ValidationError("Sorry, when we'll get to the non-human audience, we will call you")
     return years_of_experience
 
