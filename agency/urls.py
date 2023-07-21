@@ -17,8 +17,7 @@ from agency.views import (
     NewspaperCreateView,
     NewspaperUpdateView,
     NewspaperDeleteView,
-    ToggleAssignToNewspaperView,
-    ToggleAssignToTopicView,
+    ToggleAssignToNewspaperView
 )
 
 
@@ -39,7 +38,7 @@ urlpatterns = [
         name="topic-detail",
     ),
     path(
-        "topics/",
+        "topics/create/",
         TopicCreateView.as_view(),
         name="topic-create",
     ),
@@ -52,11 +51,6 @@ urlpatterns = [
         "topics/<int:pk>/delete/",
         TopicDeleteView.as_view(),
         name="topic-delete",
-    ),
-    path(
-        "topics/<int:pk>/toggle-assign/",
-        ToggleAssignToTopicView.as_view(),
-        name="toggle-topic-assign",
     ),
     path(
         "newspapers/",

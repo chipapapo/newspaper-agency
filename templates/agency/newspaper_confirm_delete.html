@@ -1,0 +1,13 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
+  <h1>Delete newspaper</h1>
+  <h3>{{ newspaper }}?</h3>
+  <form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Yes" class="btn btn-danger">
+    <a href="{% url 'agency:newspaper-detail' newspaper.pk %}" class="btn btn-success">No</a>
+  </form>
+</div>
+{% endblock %}

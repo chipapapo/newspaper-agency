@@ -8,7 +8,10 @@
       <div class="card mb-4">
         <div class="card-header pb-0 d-flex justify-content-between align-items-center">
           <h6>Redactors table</h6>
-          {% include 'includes/searchbar.html' %}
+          <div class="mr-auto d-flex mx-2">
+            <a href="{% url 'agency:redactor-create' %}" class="btn btn-primary mx-2 link-to-page">Create</a>
+            {% include 'includes/searchbar.html' %}
+          </div>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive p-0">
