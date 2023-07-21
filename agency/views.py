@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.views import (
     LoginView,
     PasswordResetView,
@@ -184,25 +184,16 @@ class RedactorDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class ToggleAssignToNewspaperView(LoginRequiredMixin, View):
-    def get(self, request, pk):
-        redactor = Redactor.objects.get(id=request.user.id)
-        if Newspaper.objects.get(id=pk) in redactor.redactors.all():
-            redactor.redactors.remove(pk)
+    def post(self, request, pk):
+        redactor = get_object_or_404(Redactor, id=request.user.id)
+        newspaper = get_object_or_404(Newspaper, id=pk)
+
+        if newspaper in redactor.redactors.all():
+            redactor.redactors.remove(newspaper)
         else:
-            redactor.redactors.add(pk)
+            redactor.redactors.add(newspaper)
+
         return HttpResponseRedirect(reverse_lazy("agency:newspaper-detail", args=[pk]))
-
-
-class ToggleAssignToTopicView(LoginRequiredMixin, View):
-    def get(self, request, pk):
-        redactor = Redactor.objects.get(id=request.user.id)
-        if (
-                Redactor.objects.get(id=pk) in redactor.topics.all()
-        ):
-            redactor.topics.remove(pk)
-        else:
-            redactor.topics.add(pk)
-        return HttpResponseRedirect(reverse_lazy("agency:topic-list", args=[pk]))
 
 
 # Soft UI

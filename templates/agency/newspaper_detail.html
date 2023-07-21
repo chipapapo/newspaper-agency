@@ -25,15 +25,18 @@
             <div class="nav-wrapper position-relative end-0">
               <ul class="nav nav-pills nav-fill p-1 bg-transparent" role="tablist">
                 <li>
-                  {% if newspaper in user.redactors.all %}
-                    <a href="{% url 'agency:toggle-newspaper-assign' newspaper.pk %}" class="btn btn-danger link-to-page">
-                      Unassign
-                    </a>
-                  {% else %}
-                    <a href="{% url 'agency:toggle-newspaper-assign' newspaper.pk %}" class="btn btn-success link-to-page">
-                      Assign
-                    </a>
-                  {% endif %}
+                  <form method="post" action="{% url 'agency:toggle-newspaper-assign' newspaper.pk %}">
+                    {% csrf_token %}
+                    {% if newspaper in user.redactors.all %}
+                      <button type="submit" class="btn btn-danger link-to-page">
+                        Unassign
+                      </button>
+                    {% else %}
+                      <button type="submit" class="btn btn-success link-to-page">
+                        Assign
+                      </button>
+                    {% endif %}
+                  </form>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link mb-0 px-0 py-1 " href="{% url 'agency:newspaper-update' newspaper.pk %}" aria-selected="false">
