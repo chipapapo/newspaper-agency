@@ -1,3 +1,4 @@
 Django==4.2.3
 crispy_bootstrap4==2022.1
 django-admin-soft-dashboard==1.0.12
+Faker==19.2.0
