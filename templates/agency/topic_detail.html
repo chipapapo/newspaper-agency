@@ -111,14 +111,6 @@
       </div>
     </div>
 
-{% for newspaper in topic.newspaper_set.all %}
-    {{ newspaper.title }}
-  {% empty %}
-    No newspaper
-{% endfor %}
-
       {% include "includes/footer.html" %}
-{#    </div>#}
-{#  </div>#}
 
 {% endblock content %}
