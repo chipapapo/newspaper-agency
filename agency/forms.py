@@ -29,9 +29,10 @@ class RedactorCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Redactor
         fields = UserCreationForm.Meta.fields + (
-            "years_of_experience",
+            "email",
             "first_name",
             "last_name",
+            "years_of_experience",
         )
 
     def clean_years_of_experience(self):
