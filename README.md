@@ -21,7 +21,7 @@ Register your own profile and feel free to do what you want.
 
 [comment]: <> (## Check it out)
 
-[comment]: <> ([link to a web page](https://newspaper-agency-mpq9.onrender.com)
+[comment]: <> (link to a web page)
 
 ## Features
 
