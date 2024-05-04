@@ -4,12 +4,12 @@
 Django project for managing your own newspaper agency.
 
 ## Installing
-
+Firstly, you need to put ```DJANGO_SECRET_KEY``` in your environment variables, you can get it [here](https://djecrety.ir/).
+Then use this script:
 ```shell
 git clone https://github.com/chipapapo/newspaper-agency.git
 cd newspaper-agency
-python4 -m venv venv
-source venv/bin/activate
+python3 -m venv venv
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
@@ -17,15 +17,11 @@ python manage.py runserver
 
 ## Getting started
 
-You can use this profile
-- login: user
-- password: user12345
+Register your own profile and feel free to do what you want.
 
-Or register your own profile.
+[comment]: <> (## Check it out)
 
-## Check it out
-
-[link to a web page](https://newspaper-agency-mpq9.onrender.com)
+[comment]: <> ([link to a web page](https://newspaper-agency-mpq9.onrender.com)
 
 ## Features
 
